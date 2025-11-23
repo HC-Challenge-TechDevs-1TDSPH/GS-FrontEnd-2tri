@@ -180,7 +180,7 @@ Projeto desenvolvido para o **Global Solution (FIAP)**.
 ## 🔗 13. Links Importantes
 
 * **Repositório GitHub:** [https://github.com/HC-Challenge-TechDevs-1TDSPH/GS-FrontEnd-2tri.git](https://github.com/HC-Challenge-TechDevs-1TDSPH/GS-FrontEnd-2tri.git)
-* **Deploy Vercel:** [https://gs-front-icj2fcyab-felipesousa1106-9894s-projects.vercel.app/](https://gs-front-icj2fcyab-felipesousa1106-9894s-projects.vercel.app/)
+* **Deploy Vercel:** [https://gs-front-82rmi2p7i-aline-lourencos-projects.vercel.app/](https://gs-front-82rmi2p7i-aline-lourencos-projects.vercel.app/)
 * **Vídeo de Apresentação:** *(adicione aqui)*
 
 ---
