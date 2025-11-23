@@ -1,63 +1,90 @@
-# 👁️ FutureLens - Inteligência de Carreira
+# 👁️ FutureLens — Inteligência de Carreira
 
-![React](https://img.shields.io/badge/React-18.x-blue)
-![Vite](https://img.shields.io/badge/Vite-5.x-purple)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue)
-![Tailwind](https://img.shields.io/badge/Tailwind-4.0-cyan)
+**React • Vite • TypeScript • Tailwind CSS**
 
-## 1. Título e Descrição
-**FutureLens** é uma plataforma SaaS B2B/B2C focada em inteligência de carreira. Utilizamos análise de dados de mercado para ajudar profissionais a identificar lacunas de competência (*skills gap*) e empresas a gerirem o desenvolvimento de seus talentos. A aplicação oferece dashboards personalizados, trilhas de aprendizado e comparativos de mercado em tempo real.
+---
 
-## 2. Status do Projeto
-🚀 **Finalizado**
-*O projeto encontra-se com as principais funcionalidades de Front-end integradas à API Java.*
+## 📌 1. Título e Descrição
 
-## 3. Sumário
-* [1. Título e Descrição](#1-título-e-descrição)
-* [2. Status do Projeto](#2-status-do-projeto)
-* [4. Sobre o Projeto](#4-sobre-o-projeto)
-* [5. Tecnologias Utilizadas](#5-tecnologias-utilizadas)
-* [6. Instalação](#6-instalação)
-* [7. Como Usar](#7-como-usar)
-* [8. Estrutura de Pastas](#8-estrutura-de-pastas)
-* [9. Endpoints e Rotas](#9-endpoints-e-rotas)
-* [10. Autores e Créditos](#10-autores-e-créditos)
-* [11. Screenshots](#11-screenshots)
-* [12. Contato](#12-contato)
-* [13. Links Importantes](#12-links-importantes)
-  
+**FutureLens** é uma plataforma **SaaS B2B/B2C** focada em **inteligência de carreira**. Utilizamos análise de dados de mercado para identificar *skills gap*, sugerir trilhas de aprendizado personalizadas e ajudar empresas a desenvolverem seus talentos.
 
-## 4. Sobre o Projeto
-O FutureLens nasceu da necessidade de alinhar a formação profissional com a velocidade das mudanças no mercado de trabalho. A aplicação consome uma API Java que processa dados de tendências e retorna:
-* Nível de prontidão do usuário.
+A aplicação entrega:
+
+* Análise de prontidão profissional.
 * Habilidades emergentes por setor.
-* Comparativo entre o perfil do usuário e a média do mercado.
-* Trilhas de aprendizado sugeridas.
+* Comparativos de mercado em tempo real.
+* Trilhas de aprendizado recomendadas.
 
-## 5. Tecnologias Utilizadas
+---
+
+## 🚀 2. Status do Projeto
+
+**Finalizado** — Todas as funcionalidades essenciais do Front-end estão integradas à API Java.
+
+---
+
+## 📄 3. Sumário
+
+1. Título e Descrição
+2. Status do Projeto
+3. Sumário
+4. Sobre o Projeto
+5. Tecnologias Utilizadas
+6. Instalação
+7. Como Usar
+8. Estrutura de Pastas
+9. Endpoints e Rotas
+10. Autores e Créditos
+11. Screenshots
+12. Contato
+13. Links Importantes
+
+---
+
+## 🧠 4. Sobre o Projeto
+
+O **FutureLens** nasceu da necessidade de alinhar o desenvolvimento profissional ao ritmo acelerado do mercado de trabalho. A aplicação se conecta a uma API Java/Spring Boot que processa dados e retorna análises como:
+
+* Nível de prontidão do usuário.
+* Habilidades em ascensão no mercado.
+* Comparativo entre o usuário e a média do setor.
+* Trilhas de aprendizado personalizadas.
+
+---
+
+## 🛠️ 5. Tecnologias Utilizadas
 
 **Front-end:**
-* [React](https://reactjs.org/) - Biblioteca para construção de interfaces.
-* [Vite](https://vitejs.dev/) - Build tool rápida e moderna.
-* [TypeScript](https://www.typescriptlang.org/) - Superset JavaScript com tipagem estática.
-* [Tailwind CSS](https://tailwindcss.com/) - Framework CSS utilitário (v4).
-* [React Router Dom](https://reactrouter.com/) - Gerenciamento de rotas.
-* [React Icons](https://react-icons.github.io/react-icons/) - Biblioteca de ícones.
+
+* React
+* Vite
+* TypeScript
+* Tailwind CSS (v4)
+* React Router Dom
+* React Icons
 
 **Integração:**
-* Fetch API (Nativo)
-* API Rest (Java/Spring Boot no Backend)
 
-## 6. Instalação
+* Fetch API
+* API REST Java
 
-Pré-requisitos: Node.js (v18+) e npm/yarn instalados.
+---
+
+## 🧩 6. Instalação
+
+### ✔️ Pré‑requisitos
+
+* Node.js (v18+)
+* npm ou yarn
+
+### ✔️ Passo a passo
 
 ```bash
 # 1. Clone o repositório
-git clone [https://github.com/seu-usuario/future-lens.git](https://github.com/seu-usuario/future-lens.git)
+https://github.com/HC-Challenge-TechDevs-1TDSPH/GS-FrontEnd-2tri.git
 
 # 2. Entre na pasta do projeto
-cd future-lens
+cd GS-FrontEnd-2tri
 
 # 3. Instale as dependências
 npm install
@@ -66,84 +93,96 @@ npm install
 npm run dev
 ```
 
-7. Como Usar
-A aplicação está implantada e pode ser acessada publicamente através da URL abaixo.
+---
 
-🔗 Acesse a aplicação: https://futurelens-app.vercel.app (Exemplo - Substitua pela sua URL real)
+## ▶️ 7. Como Usar
 
-Fluxo Básico:
+A aplicação está disponível publicamente:
+🔗 **Deploy:** [https://gs-front-icj2fcyab-felipesousa1106-9894s-projects.vercel.app/](https://gs-front-icj2fcyab-felipesousa1106-9894s-projects.vercel.app/)
 
-Acesse a Home e clique em "Começar Agora".
+### Fluxo Básico
 
-Crie uma conta ou faça Login.
+1. Acesse a Home e clique em **“Começar Agora”**.
+2. Crie uma conta ou faça login.
+3. Veja seu **Score de Prontidão** no Dashboard.
+4. Explore **Trilhas de Aprendizado**.
+5. Acesse **Mercado (Premium)** para comparativos setoriais.
 
-No Dashboard, visualize seu Score de Prontidão.
+---
 
-Navegue para Trilhas para ver cursos recomendados.
+## 🗂️ 8. Estrutura de Pastas
 
-Acesse Mercado (Premium) para ver comparativos setoriais.
-
-8. Estrutura de Pastas
+```
 src/
-├── assets/          # Imagens e recursos estáticos
-├── components/      # Componentes reutilizáveis (Header, Footer, etc)
-├── routes/          # Páginas da aplicação
+├── assets/        # Imagens e recursos estáticos
+├── components/    # Componentes reutilizáveis
+├── routes/        # Páginas da aplicação
 │   ├── AuthPage/
 │   ├── Dashboard/
 │   ├── HomePage/
 │   ├── TeamPage/
-│   └── ... (outras páginas)
-├── services/        # Configuração da API (api.ts)
-├── types/           # Interfaces TypeScript (DTOs)
-├── App.tsx          # Componente Raiz
-├── globals.css      # Estilos globais e Tailwind
-└── main.tsx         # Ponto de entrada e Rotas
+│   └── ...
+├── services/      # Configuração da API (api.ts)
+├── types/         # Interfaces e DTOs
+├── App.tsx        # Componente raiz
+├── globals.css    # Estilos globais e Tailwind
+└── main.tsx       # Entrada da aplicação e rotas
+```
 
-9. Endpoints ou Rotas Principais
-Rotas do Front-end:
+---
 
-/ - Landing Page (Home)
+## 🌐 9. Endpoints e Rotas
 
-/login / /cadastro - Autenticação
+### **Rotas do Front-end**
 
-/dashboard - Painel principal do usuário
+* `/` — Home
+* `/login` — Login
+* `/cadastro` — Cadastro
+* `/dashboard` — Painel do Usuário
+* `/trilhas` — Trilhas de aprendizado
+* `/tendencias` — Habilidades emergentes
+* `/comparativo` — Comparativo de mercado (Premium)
+* `/analise` — Resultado da IA
+* `/b2b` — Área para empresas
+* `/integrantes` — Equipe
 
-/trilhas - Listagem de cursos e módulos
+---
 
-/tendencias - Habilidades em alta (Vitrine)
+## 👥 10. Autores e Créditos
 
-/comparativo - Análise de mercado (Premium)
+Projeto desenvolvido para o **Global Solution (FIAP)**.
 
-/analise - Resultado detalhado da IA
+| Integrante                 | RM     | Turma  |
+| -------------------------- | ------ | ------ |
+| Felipe Monte de Sousa      | 562019 | 1TDSPH |
+| Aline Lourenço Carvalho    | 564538 | 1TDSPK |
+| Luna de Carvalho Guimarães | 562290 | 1TDSPH |
 
-/b2b - Área administrativa para empresas
+---
 
-/integrantes - Página da equipe
+## 🖼️ 11. Screenshots / Demonstração
 
-10. Autores e Créditos
-Este projeto foi desenvolvido pelos alunos da FIAP como parte do Global Solution.
-Integrante Felipe Monte de Sousa  |  Aline Lourenço Carvalho  |   Luna de Carvalho Guimarães
-RM               562019           |        564538             |            562290
-Turma            1TDSPH           |        1TDSPK             |            1TDSPH
+* Dashboard — visão geral de métricas
+* Trilhas de aprendizado — módulos e progresso
 
-11. Screenshots / Demonstração
-Dashboard
-Visão geral das métricas do usuário.
+*(Substitua por imagens reais da pasta `/assets`)*
 
-Trilhas de Aprendizado
-Módulos e progresso de cursos.
+---
 
-(Substitua os caminhos acima por imagens reais na pasta assets do seu repositório)
+## 📬 12. Contato
 
-12. Contato
-Caso tenha dúvidas ou sugestões, entre em contato através da nossa página de suporte ou diretamente com os desenvolvedores via LinkedIn.
-Felipe: https://www.linkedin.com/in/felipe-sousa-761633356/
-Aline: https://www.linkedin.com/in/aline-louren%C3%A7o-carvalho/
-Luna: https://www.linkedin.com/in/luna-guimar%C3%A3es-b0ba82309/
+* **Felipe:** [https://www.linkedin.com/in/felipe-sousa-761633356/](https://www.linkedin.com/in/felipe-sousa-761633356/)
+* **Aline:** [https://www.linkedin.com/in/aline-louren%C3%A7o-carvalho/](https://www.linkedin.com/in/aline-louren%C3%A7o-carvalho/)
+* **Luna:** [https://www.linkedin.com/in/luna-guimar%C3%A3es-b0ba82309/](https://www.linkedin.com/in/luna-guimar%C3%A3es-b0ba82309/)
 
-13. Links Importantes
-Repositório GitHub: 
-Vídeo do Youtube:
-Vercel: https://gs-front-icj2fcyab-felipesousa1106-9894s-projects.vercel.app/
+---
 
-© 2025 FutureLens. Todos os direitos reservados.
+## 🔗 13. Links Importantes
+
+* **Repositório GitHub:** [https://github.com/HC-Challenge-TechDevs-1TDSPH/GS-FrontEnd-2tri.git](https://github.com/HC-Challenge-TechDevs-1TDSPH/GS-FrontEnd-2tri.git)
+* **Deploy Vercel:** [https://gs-front-icj2fcyab-felipesousa1106-9894s-projects.vercel.app/](https://gs-front-icj2fcyab-felipesousa1106-9894s-projects.vercel.app/)
+* **Vídeo de Apresentação:** *(adicione aqui)*
+
+---
+
+© 2025 **FutureLens** — Todos os direitos reservados.
