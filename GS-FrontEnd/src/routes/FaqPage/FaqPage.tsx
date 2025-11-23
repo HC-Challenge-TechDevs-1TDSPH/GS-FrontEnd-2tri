@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom'; // Import para navegação interna
 import { FaSearch, FaChevronDown, FaRegQuestionCircle, FaHeadset, FaArrowRight } from 'react-icons/fa';
 

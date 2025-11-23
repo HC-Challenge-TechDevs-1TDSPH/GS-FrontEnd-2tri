@@ -1,4 +1,3 @@
-import React from 'react';
 import { FaLightbulb, FaUsers, FaGlobeAmericas, FaLock } from 'react-icons/fa';
 import equipeImg from '/img/equipe.jpeg';
 
