@@ -10,7 +10,7 @@ export default function TracksPage() {
   useEffect(() => {
     const fetchCursos = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/cursos`);
+        const response = await fetch(`${API_BASE_URL}/java/curso`);
         if (response.ok) {
             const data = await response.json();
             setCursos(data);

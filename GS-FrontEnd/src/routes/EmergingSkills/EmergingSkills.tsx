@@ -7,28 +7,30 @@ export default function EmergingSkills() {
   const [skills, setSkills] = useState<Habilidade[]>([]);
   const [addedSkills, setAddedSkills] = useState<number[]>([]); 
   const [loading, setLoading] = useState(true);
+  
   const userId = localStorage.getItem('userId') || '1'; 
+
   useEffect(() => {
     const fetchSkills = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/habilidades`);
+        // ROTA CORRIGIDA: /java/habilidade
+        const response = await fetch(`${API_BASE_URL}/java/habilidade`);
         if (response.ok) {
             const data = await response.json();
             setSkills(data);
         }
       } catch (error) {
-        setSkills([
-            { idHabilidade: 1, nomeHabilidade: "IA Generativa", descricao: "LLMs", categoria: "Tecnologia" },
-            { idHabilidade: 2, nomeHabilidade: "Liderança 4.0", descricao: "Gestão", categoria: "Soft Skills" }
-        ]);
+        console.log("Erro ao buscar skills");
       } finally {
         setLoading(false);
       }
     };
     fetchSkills();
   }, []);
+
   const handleAddSkill = async (habilidadeId: number) => {
     if (addedSkills.includes(habilidadeId)) return;
+
     try {
         const payload = {
             idUsuario: parseInt(userId),
@@ -38,28 +40,34 @@ export default function EmergingSkills() {
             prioridade: 5,
             dataDeRegistro: new Date().toISOString().split('T')[0]
         };
-        const response = await fetch(`${API_BASE_URL}/usuario/habilidades`, {
+
+        // ROTA CORRIGIDA: /java/usuariohabilidade
+        const response = await fetch(`${API_BASE_URL}/java/usuariohabilidade`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
         });
-        if (response.ok) {
+
+        if (response.ok || response.status === 201) {
             setAddedSkills([...addedSkills, habilidadeId]);
-            alert("Habilidade adicionada ao seu perfil!");
+            alert("Habilidade adicionada!");
         } else {
-            alert("Erro ao adicionar habilidade.");
+            alert("Erro ao adicionar (talvez já exista).");
         }
     } catch (error) {
         alert("Erro de conexão.");
     }
   };
+
   if (loading) return <div style={{padding:40, textAlign:'center'}}>Carregando tendências...</div>;
+
   return (
     <div className="emerging-container">
         <div className="page-header">
           <h1 className="page-title">Vitrine do Futuro</h1>
-          <p className="page-subtitle">Habilidades em alta no banco de dados global.</p>
+          <p className="page-subtitle">Habilidades disponíveis no sistema.</p>
         </div>
+
         <div className="skills-grid">
           {skills.map(skill => {
             const isAdded = addedSkills.includes(skill.idHabilidade);

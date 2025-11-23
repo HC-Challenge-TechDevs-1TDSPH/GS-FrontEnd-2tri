@@ -4,37 +4,32 @@ import { API_BASE_URL } from '../../services/api';
 import type { UsuarioHabilidade, Habilidade } from '../../types';
 
 export default function SkillsPage() {
+  // Pega o ID do usuário logado ou usa 1 como teste
   const userId = localStorage.getItem('userId') || '1';
 
-  // Listas de dados
   const [userSkills, setUserSkills] = useState<UsuarioHabilidade[]>([]);
-  const [catalogSkills, setCatalogSkills] = useState<Habilidade[]>([]); // Para o dropdown (autocomplete)
+  const [catalogSkills, setCatalogSkills] = useState<Habilidade[]>([]);
   
-  // Controle de formulário
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Estado do formulário
   const [formData, setFormData] = useState({
-    idHabilidade: 0, // O ID da skill selecionada no dropdown
-    nivel: 1,        // 1 a 5
-    prioridade: 1    // 1 a 5
+    idHabilidade: 0,
+    nivel: 1,
+    prioridade: 1
   });
 
   // --- 1. GET (Listar) ---
-  useEffect(() => {
-    fetchData();
-  }, []);
-
   const fetchData = async () => {
     try {
       setLoading(true);
-      // Busca as skills do usuário
-      const resUserSkills = await fetch(`${API_BASE_URL}/usuario/habilidades`); // Ajuste rota se necessário (ex: /usuarios/{id}/habilidades)
       
-      // Busca todas as skills do sistema para o dropdown
-      const resCatalog = await fetch(`${API_BASE_URL}/habilidades`);
+      // ROTA CORRIGIDA: /java/usuariohabilidade/usuario/{id}
+      const resUserSkills = await fetch(`${API_BASE_URL}/java/usuariohabilidade/usuario/${userId}`);
+      
+      // ROTA CORRIGIDA: /java/habilidade (Baseado no HabilidadeResource anterior)
+      const resCatalog = await fetch(`${API_BASE_URL}/java/habilidade`);
 
       if (resUserSkills.ok && resCatalog.ok) {
         const mySkillsData = await resUserSkills.json();
@@ -44,22 +39,17 @@ export default function SkillsPage() {
         setCatalogSkills(catalogData);
       }
     } catch (error) {
-      console.log("API Offline ou rota incorreta. Usando dados locais.");
-      // Fallback para não quebrar a tela
-      setUserSkills([
-        { idRelacao: 1, idUsuario: 1, idHabilidade: 1, nomeHabilidade: "Java", nivel: 3, prioridade: 5, statusRelacao: "Estudando" }
-      ]);
-      setCatalogSkills([
-        { idHabilidade: 1, nomeHabilidade: "Java", descricao: "Backend", categoria: "Tech" },
-        { idHabilidade: 2, nomeHabilidade: "React", descricao: "Frontend", categoria: "Tech" },
-        { idHabilidade: 3, nomeHabilidade: "Scrum", descricao: "Agile", categoria: "Gestão" }
-      ]);
+      console.log("Erro ao carregar dados.");
     } finally {
       setLoading(false);
     }
   };
 
-  // --- HANDLERS DO FORMULÁRIO ---
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  // --- HANDLERS ---
   const openCreateForm = () => {
     setEditingId(null);
     setFormData({ idHabilidade: 0, nivel: 1, prioridade: 1 });
@@ -68,7 +58,6 @@ export default function SkillsPage() {
 
   const openEditForm = (skill: UsuarioHabilidade) => {
     setEditingId(skill.idRelacao);
-    // Ao editar, preenchemos com os dados atuais
     setFormData({
         idHabilidade: skill.idHabilidade,
         nivel: skill.nivel,
@@ -77,46 +66,50 @@ export default function SkillsPage() {
     setIsFormOpen(true);
   };
 
-  // --- AÇÃO DE SALVAR (POST ou PUT) ---
-  const handleSave = async (e: React.FormEvent) => {
+  // --- SALVAR (POST / PUT) ---
+const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (formData.idHabilidade === 0 && !editingId) {
-      alert("Selecione uma habilidade da lista.");
+    if ((formData.idHabilidade === 0 && !editingId) || !userId) {
+      alert("Selecione uma habilidade ou faça login novamente.");
       return;
     }
 
+    // Data de hoje (Segura)
+    const today = new Date().toISOString().split('T')[0];
+
     const payload = {
+        idRelacao: editingId || 0,
         idUsuario: parseInt(userId),
         idHabilidade: formData.idHabilidade,
-        statusRelacao: "Em Progresso", // Valor padrão
+        statusRelacao: "ATUAL", 
         nivel: Number(formData.nivel),
         prioridade: Number(formData.prioridade),
-        dataDeRegistro: new Date().toISOString().split('T')[0]
+        dataDeRegistro: today
     };
+
+    console.log("Enviando Payload:", payload);
 
     try {
         if (editingId) {
-            // --- 3. PUT (Atualizar) ---
-            // Rota esperada: /usuario/habilidades/{idRelacao}
-            const response = await fetch(`${API_BASE_URL}/usuario/habilidades/${editingId}`, {
+            // PUT
+            const response = await fetch(`${API_BASE_URL}/java/usuariohabilidade/${editingId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ ...payload, idRelacao: editingId }) // Inclui ID no corpo se o Java exigir
+                body: JSON.stringify(payload)
             });
 
             if (response.ok) {
                 alert("Habilidade atualizada!");
-                fetchData(); // Recarrega a lista
+                fetchData();
                 setIsFormOpen(false);
             } else {
-                alert("Erro ao atualizar.");
+                alert("Erro ao atualizar. Verifique os dados.");
             }
 
         } else {
-            // --- 2. POST (Criar) ---
-            // Rota esperada: /usuario/habilidades
-            const response = await fetch(`${API_BASE_URL}/usuario/habilidades`, {
+            // POST
+            const response = await fetch(`${API_BASE_URL}/java/usuariohabilidade`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
@@ -124,57 +117,52 @@ export default function SkillsPage() {
 
             if (response.ok || response.status === 201) {
                 alert("Habilidade adicionada!");
-                fetchData(); // Recarrega a lista
+                fetchData();
                 setIsFormOpen(false);
             } else {
-                alert("Erro ao adicionar (Verifique se já não possui essa skill).");
+                // Mensagem específica baseada na lógica do seu BO
+                alert("Erro ao adicionar. Possíveis causas:\n1. Você já possui essa habilidade (Duplicada).\n2. Usuário inválido.");
             }
         }
     } catch (error) {
+        console.error(error);
         alert("Erro de conexão com a API.");
     }
   };
 
-  // --- 4. DELETE (Remover) ---
+  // --- DELETE ---
   const handleDelete = async (idRelacao: number) => {
-    if (window.confirm("Tem certeza que deseja remover esta habilidade do seu perfil?")) {
+    if (window.confirm("Remover esta habilidade?")) {
       try {
-        const response = await fetch(`${API_BASE_URL}/usuario/habilidades/${idRelacao}`, {
+        // DELETE CORRIGIDO: /java/usuariohabilidade/{id}
+        const response = await fetch(`${API_BASE_URL}/java/usuariohabilidade/${idRelacao}`, {
             method: 'DELETE'
         });
 
         if (response.ok || response.status === 204) {
-            // Remove da lista visualmente sem precisar recarregar tudo
             setUserSkills(prev => prev.filter(skill => skill.idRelacao !== idRelacao));
-        } else {
-            alert("Erro ao deletar.");
-        }
-      } catch (error) {
-        alert("Erro de conexão ao deletar.");
-      }
+        } else { alert("Erro ao deletar."); }
+      } catch (error) { alert("Erro de conexão."); }
     }
   };
 
-  // Helper de cores para badges
-  const getLevelBadge = (nivel: number) => {
-    if (nivel <= 2) return { label: 'Iniciante', bg: '#dbeafe', color: '#1e40af' };
-    if (nivel <= 4) return { label: 'Intermediário', bg: '#fef3c7', color: '#92400e' };
-    return { label: 'Avançado', bg: '#dcfce7', color: '#166534' };
+  // Helper para o nome
+  const getSkillName = (id: number) => {
+    const skill = catalogSkills.find(s => s.idHabilidade === id);
+    return skill ? skill.nomeHabilidade : `Skill #${id}`;
   };
 
-  if (loading) return <div style={{padding:40, textAlign:'center'}}>Carregando habilidades...</div>;
+  if (loading) return <div style={{padding:40, textAlign:'center'}}>Carregando...</div>;
 
   return (
     <div className="skills-page-container" style={{padding: '40px 20px', background: 'var(--bg-color)', minHeight: '100vh'}}>
       <div className="skills-card" style={{maxWidth: 800, margin: '0 auto', background: 'var(--card-bg)', borderRadius: 16, padding: 30, border: '1px solid var(--border-color)'}}>
         
-        {/* HEADER */}
         <div className="skills-header" style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 30, borderBottom: '1px solid var(--border-color)', paddingBottom: 20}}>
           <div>
             <h2 style={{display: 'flex', alignItems: 'center', gap: 10, margin: 0, color: 'var(--text-dark)'}}>
               <FaLayerGroup /> Minhas Habilidades
             </h2>
-            <p style={{margin: 0, color: 'var(--text-muted)', fontSize: '0.9rem'}}>Gerencie suas competências técnicas.</p>
           </div>
           {!isFormOpen && (
             <button className="btn-primary" onClick={openCreateForm}>
@@ -183,21 +171,15 @@ export default function SkillsPage() {
           )}
         </div>
 
-        {/* FORMULÁRIO (POST/PUT) */}
         {isFormOpen && (
-          <form onSubmit={handleSave} style={{background: 'var(--acc-bar-bg)', padding: 20, borderRadius: 12, marginBottom: 30, animation: 'slideDown 0.3s'}}>
-            <h3 style={{marginTop: 0, marginBottom: 15, fontSize: '1.1rem', color: 'var(--text-dark)'}}>
-                {editingId ? 'Editar Habilidade' : 'Adicionar Nova Habilidade'}
-            </h3>
-            
+          <form onSubmit={handleSave} style={{background: 'var(--acc-bar-bg)', padding: 20, borderRadius: 12, marginBottom: 30}}>
             <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 15, marginBottom: 20}}>
-              {/* Select Habilidade (Do Catálogo) */}
               <div style={{display: 'flex', flexDirection: 'column'}}>
-                <label style={{fontSize: '0.85rem', fontWeight: 'bold', marginBottom: 5}}>Habilidade</label>
+                <label style={{fontSize: '0.85rem', fontWeight: 'bold'}}>Habilidade</label>
                 <select 
                     className="input-field"
                     value={formData.idHabilidade}
-                    disabled={!!editingId} // Não pode mudar a skill na edição, só o nível
+                    disabled={!!editingId}
                     onChange={e => setFormData({...formData, idHabilidade: Number(e.target.value)})}
                     required
                 >
@@ -207,100 +189,51 @@ export default function SkillsPage() {
                     ))}
                 </select>
               </div>
-
-              {/* Input Nível */}
               <div style={{display: 'flex', flexDirection: 'column'}}>
-                <label style={{fontSize: '0.85rem', fontWeight: 'bold', marginBottom: 5}}>Nível (1-5)</label>
-                <input 
-                    type="number" min="1" max="5"
-                    className="input-field"
-                    value={formData.nivel}
-                    onChange={e => setFormData({...formData, nivel: Number(e.target.value)})}
-                />
+                <label style={{fontSize: '0.85rem', fontWeight: 'bold'}}>Nível (1-5)</label>
+                <input type="number" min="1" max="5" className="input-field" value={formData.nivel} onChange={e => setFormData({...formData, nivel: Number(e.target.value)})} />
               </div>
-
-              {/* Input Prioridade */}
               <div style={{display: 'flex', flexDirection: 'column'}}>
-                <label style={{fontSize: '0.85rem', fontWeight: 'bold', marginBottom: 5}}>Prioridade (1-5)</label>
-                <input 
-                    type="number" min="1" max="5"
-                    className="input-field"
-                    value={formData.prioridade}
-                    onChange={e => setFormData({...formData, prioridade: Number(e.target.value)})}
-                />
+                <label style={{fontSize: '0.85rem', fontWeight: 'bold'}}>Prioridade</label>
+                <input type="number" min="1" max="5" className="input-field" value={formData.prioridade} onChange={e => setFormData({...formData, prioridade: Number(e.target.value)})} />
               </div>
             </div>
-
             <div style={{display: 'flex', justifyContent: 'flex-end', gap: 10}}>
-              <button type="button" className="btn-secondary" onClick={() => setIsFormOpen(false)}>
-                Cancelar
-              </button>
-              <button type="submit" className="btn-primary">
-                <FaSave /> Salvar
-              </button>
+              <button type="button" className="btn-secondary" onClick={() => setIsFormOpen(false)}>Cancelar</button>
+              <button type="submit" className="btn-primary"><FaSave /> Salvar</button>
             </div>
           </form>
         )}
 
-        {/* LISTA DE HABILIDADES (GET + DELETE) */}
         <ul style={{listStyle: 'none', padding: 0}}>
           {userSkills.length === 0 ? (
             <div style={{textAlign: 'center', padding: 30, color: 'var(--text-muted)'}}>
                 <FaExclamationCircle size={30} style={{marginBottom: 10, opacity: 0.5}} />
-                <p>Você ainda não cadastrou nenhuma habilidade.</p>
+                <p>Nenhuma habilidade cadastrada.</p>
             </div>
           ) : (
-            userSkills.map(skill => {
-                const badge = getLevelBadge(skill.nivel);
-                // Tenta achar o nome no catálogo se não vier na skill do usuário
-                const nomeExibicao = skill.nomeHabilidade || catalogSkills.find(c => c.idHabilidade === skill.idHabilidade)?.nomeHabilidade || `ID: ${skill.idHabilidade}`;
-
-                return (
-                  <li key={skill.idRelacao} style={{
-                      background: 'var(--card-bg)', border: '1px solid var(--border-color)', 
-                      borderRadius: 12, padding: '15px 20px', marginBottom: 12, 
-                      display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-                      transition: 'transform 0.2s'
-                  }}>
-                    
-                    <div style={{display: 'flex', alignItems: 'center', gap: 15}}>
-                        <div style={{fontWeight: 700, fontSize: '1.1rem', color: 'var(--text-dark)'}}>
-                            {nomeExibicao}
-                        </div>
-                        <span style={{
-                            fontSize: '0.75rem', padding: '4px 10px', borderRadius: 20, 
-                            fontWeight: 700, textTransform: 'uppercase',
-                            backgroundColor: badge.bg, color: badge.color
-                        }}>
-                            {badge.label} ({skill.nivel})
-                        </span>
-                        <span style={{fontSize: '0.8rem', color: 'var(--text-muted)'}}>
-                            Prioridade: {skill.prioridade}
-                        </span>
+            userSkills.map(skill => (
+              <li key={skill.idRelacao} style={{
+                  background: 'var(--card-bg)', border: '1px solid var(--border-color)', 
+                  borderRadius: 12, padding: '15px 20px', marginBottom: 12, 
+                  display: 'flex', justifyContent: 'space-between', alignItems: 'center'
+              }}>
+                <div>
+                    <div style={{fontWeight: 700, fontSize: '1.1rem', color: 'var(--text-dark)'}}>
+                        {getSkillName(skill.idHabilidade)}
                     </div>
-
-                    <div style={{display: 'flex', gap: 8}}>
-                      <button 
-                        onClick={() => openEditForm(skill)}
-                        style={{background: 'transparent', border: 'none', color: 'var(--primary-color)', cursor: 'pointer', padding: 8}}
-                        title="Editar"
-                      >
-                        <FaEdit size={18} />
-                      </button>
-                      <button 
-                        onClick={() => handleDelete(skill.idRelacao)}
-                        style={{background: 'transparent', border: 'none', color: 'var(--danger-color)', cursor: 'pointer', padding: 8}}
-                        title="Excluir"
-                      >
-                        <FaTrash size={18} />
-                      </button>
+                    <div style={{fontSize:'0.85rem', color:'var(--text-muted)'}}>
+                        Nível: {skill.nivel} • Prioridade: {skill.prioridade}
                     </div>
-                  </li>
-                );
-            })
+                </div>
+                <div style={{display: 'flex', gap: 8}}>
+                  <button onClick={() => openEditForm(skill)} style={{background:'transparent', border:'none', color:'var(--primary-color)', cursor:'pointer'}}><FaEdit size={18}/></button>
+                  <button onClick={() => handleDelete(skill.idRelacao)} style={{background:'transparent', border:'none', color:'var(--danger-color)', cursor:'pointer'}}><FaTrash size={18}/></button>
+                </div>
+              </li>
+            ))
           )}
         </ul>
-
       </div>
     </div>
   );

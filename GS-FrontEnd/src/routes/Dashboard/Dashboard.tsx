@@ -1,38 +1,33 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; 
 import { 
-  FaEye, FaChartPie, FaRocket, FaExclamationTriangle, FaEdit, FaMapSigns, FaRobot 
+  FaEye, FaChartPie, FaRocket, FaExclamationTriangle, FaEdit, FaMapSigns, FaRobot, FaLightbulb, FaBookOpen
 } from 'react-icons/fa';
 import { API_BASE_URL } from '../../services/api';
-import type { Habilidade, UsuarioHabilidade, ComparativoSkill } from '../../types';
+import type { Habilidade, UsuarioHabilidade, ComparativoSkill, Curso } from '../../types';
 
 export default function Dashboard() {
   const navigate = useNavigate();
   
+  // Estados de Dados
   const [prontidao, setProntidao] = useState<number>(0);
   const [habilidadesEmergentes, setHabilidadesEmergentes] = useState<Habilidade[]>([]);
   const [lacunas, setLacunas] = useState<UsuarioHabilidade[]>([]);
   const [skillsComparison, setSkillsComparison] = useState<ComparativoSkill[]>([]);
+  const [recomendacoes, setRecomendacoes] = useState<Curso[]>([]); // NOVO: Para guardar os cursos do Java
+
+  // Estados de UI
   const [loadingPredict, setLoadingPredict] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  // Fallback para quando a API estiver offline
+  // Fallback (Dados Mockados para o que o Java não tem)
   const useMockData = () => {
-    setProntidao(62);
-    setHabilidadesEmergentes([
-      { idHabilidade: 1, nomeHabilidade: "IA Generativa", descricao: "LLMs", categoria: "Tech" },
-      { idHabilidade: 2, nomeHabilidade: "Análise de Dados", descricao: "BI", categoria: "Dados" },
-      { idHabilidade: 3, nomeHabilidade: "Liderança Ágil", descricao: "Gestão", categoria: "Soft Skills" }
-    ]);
-    setLacunas([
-      { idRelacao: 1, idUsuario: 1, idHabilidade: 10, statusRelacao: "Pendente", nivel: 1, prioridade: 5, nomeHabilidade: "Inglês Técnico" },
-      { idRelacao: 2, idUsuario: 1, idHabilidade: 12, statusRelacao: "Pendente", nivel: 2, prioridade: 3, nomeHabilidade: "Python Avançado" }
-    ]);
+    setProntidao(72);
     setSkillsComparison([
       { nomeHabilidade: "React", nivelUsuario: 90, nivelMercado: 85 },
-      { nomeHabilidade: "Python", nivelUsuario: 40, nivelMercado: 95 },
-      { nomeHabilidade: "Gestão", nivelUsuario: 60, nivelMercado: 70 },
-      { nomeHabilidade: "UX Design", nivelUsuario: 75, nivelMercado: 60 }
+      { nomeHabilidade: "Java", nivelUsuario: 40, nivelMercado: 95 },
+      { nomeHabilidade: "Scrum", nivelUsuario: 60, nivelMercado: 70 },
+      { nomeHabilidade: "SQL", nivelUsuario: 75, nivelMercado: 60 }
     ]);
   };
 
@@ -40,62 +35,49 @@ export default function Dashboard() {
     const fetchDashboardData = async () => {
       try {
         setIsLoading(true);
+        const userId = localStorage.getItem('userId') || '1';
 
-        // 1. Score de Prontidão
+        // --- 1. HABILIDADES EMERGENTES (Real) ---
         try {
-            const resScore = await fetch(`${API_BASE_URL}/dashboard/score`);
-            if (resScore.ok) {
-                const data = await resScore.json();
-                setProntidao(data.score);
-            }
-        } catch (e) { console.log("Score indisponível"); }
-
-        // 2. Habilidades Emergentes
-        try {
-            const resSkills = await fetch(`${API_BASE_URL}/habilidades`); // Ajustado para rota padrão
+            const resSkills = await fetch(`${API_BASE_URL}/java/habilidade`);
             if (resSkills.ok) {
                 const data: Habilidade[] = await resSkills.json();
-                // Pega apenas as 3 primeiras para exibir no card
                 setHabilidadesEmergentes(data.slice(0, 3));
             }
-        } catch (e) { console.log("Skills indisponíveis"); }
+        } catch (e) { console.log("Skills off"); }
 
-        // 3. Lacunas (Meus Skills com nível baixo)
+        // --- 2. LACUNAS DO USUÁRIO (Real) ---
         try {
-            // Supondo que exista um endpoint que retorna meus skills
-            const resGaps = await fetch(`${API_BASE_URL}/usuario/habilidades`);
+            const resGaps = await fetch(`${API_BASE_URL}/java/usuariohabilidade/usuario/${userId}`);
             if (resGaps.ok) {
                 const data: UsuarioHabilidade[] = await resGaps.json();
-                // Filtra onde prioridade é alta
-                const gaps = data.filter(item => item.prioridade >= 4);
+                // Filtra skills com prioridade alta (ex: >= 3)
+                const gaps = data.filter(item => item.prioridade >= 3);
                 
-                // O Java manda apenas idHabilidade. Precisamos do nome.
-                // Aqui simulamos o preenchimento do nome "na mão" ou via outra requisição
+                // Preenche nome se faltar
                 const gapsComNome = gaps.map(gap => ({
                     ...gap,
-                    nomeHabilidade: `Skill #${gap.idHabilidade}` // Fallback se não tiver nome
+                    nomeHabilidade: gap.nomeHabilidade || `Skill #${gap.idHabilidade}` 
                 }));
-                
                 setLacunas(gapsComNome);
             }
-        } catch (e) { console.log("Lacunas indisponíveis"); }
+        } catch (e) { console.log("Lacunas off"); }
 
-        // 4. Comparativo
+        // --- 3. RECOMENDAÇÕES DE CURSOS (Real - Seu DashboardResource) ---
         try {
-            const resGraph = await fetch(`${API_BASE_URL}/dashboard/comparativo`);
-            if (resGraph.ok) {
-                const data = await resGraph.json();
-                setSkillsComparison(data);
-            } else {
-                throw new Error("Dados de gráfico não encontrados");
+            // Rota: /java/dashboard/recomendacoes/{id}
+            const resRec = await fetch(`${API_BASE_URL}/java/dashboard/recomendacoes/${userId}`);
+            if (resRec.ok) {
+                const data: Curso[] = await resRec.json();
+                setRecomendacoes(data);
             }
-        } catch (e) { 
-            // Se falhar tudo, usa o Mock
-            throw new Error("API Geral Falhou"); 
-        }
+        } catch (e) { console.log("Recomendações off"); }
+
+        // --- 4. DADOS MOCKADOS (Score e Gráfico - O Java não tem endpoints para isso) ---
+        useMockData();
 
       } catch (error) {
-        console.warn("Usando dados locais (Mock) devido a erro na API.");
+        console.warn("Erro geral na API");
         useMockData();
       } finally {
         setIsLoading(false);
@@ -139,8 +121,10 @@ export default function Dashboard() {
           <p>Visão estratégica da sua carreira.</p>
         </div>
 
+        {/* Grid Principal */}
         <div className="kpi-grid">
-          {/* Prontidão */}
+          
+          {/* Card 1: Prontidão (Mock) */}
           <div className="card">
             <div className="card-header"><FaRobot /> Prontidão Atual</div>
             <div className="readiness-circle" style={{ '--percentage': `${prontidao * 3.6}deg` } as React.CSSProperties}>
@@ -151,23 +135,23 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* Emergentes */}
+          {/* Card 2: Habilidades Disponíveis (Real) */}
           <div className="card">
-            <div className="card-header"><FaRocket /> Habilidades Emergentes</div>
+            <div className="card-header"><FaRocket /> Habilidades Disponíveis</div>
             <ul style={{display: 'flex', flexWrap: 'wrap', gap: 8}}>
-              {habilidadesEmergentes.map(skill => (
+              {habilidadesEmergentes.length > 0 ? habilidadesEmergentes.map(skill => (
                 <li key={skill.idHabilidade} className="tag">
                   {skill.nomeHabilidade}
                 </li>
-              ))}
+              )) : <span style={{fontSize: '0.8rem', color: 'var(--text-muted)'}}>Carregando catálogo...</span>}
             </ul>
           </div>
 
-          {/* Lacunas */}
+          {/* Card 3: Minhas Lacunas (Real) */}
           <div className="card">
-            <div className="card-header" style={{color: 'var(--danger-color)'}}><FaExclamationTriangle /> Lacunas</div>
+            <div className="card-header" style={{color: 'var(--danger-color)'}}><FaExclamationTriangle /> Atenção (Prioridade Alta)</div>
             <ul>
-              {lacunas.map(gap => (
+              {lacunas.length > 0 ? lacunas.map(gap => (
                 <li key={gap.idRelacao} style={{display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10}}>
                   <FaExclamationTriangle color="var(--danger-color)" size={14} />
                   <span>
@@ -177,12 +161,35 @@ export default function Dashboard() {
                     </span>
                   </span>
                 </li>
-              ))}
+              )) : <span style={{fontSize: '0.8rem', color: 'var(--text-muted)'}}>Nenhuma lacuna crítica encontrada.</span>}
             </ul>
           </div>
         </div>
 
-        {/* Gráfico */}
+        {/* --- NOVA SEÇÃO: RECOMENDAÇÕES DA API JAVA --- */}
+        {recomendacoes.length > 0 && (
+            <div style={{marginBottom: 30}}>
+                <h3 style={{fontSize: '1.2rem', marginBottom: 15, color: 'var(--text-dark)', display: 'flex', alignItems: 'center', gap: 10}}>
+                    <FaLightbulb style={{color: '#eab308'}} /> Recomendações para você
+                </h3>
+                <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 20}}>
+                    {recomendacoes.map(curso => (
+                        <div key={curso.idCurso} className="card" style={{padding: 20, borderLeft: '4px solid var(--primary-color)'}}>
+                            <h4 style={{fontSize: '1rem', fontWeight: 700, marginBottom: 5}}>{curso.nomeDoCurso}</h4>
+                            <p style={{fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: 10}}>
+                                {curso.plataforma} • {curso.cargaHoraria}h
+                            </p>
+                            <a href={curso.linkExterno} target="_blank" rel="noreferrer" 
+                               style={{fontSize: '0.85rem', color: 'var(--primary-color)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 5}}>
+                                <FaBookOpen /> Acessar Curso
+                            </a>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        )}
+
+        {/* Gráfico Comparativo (Mock) */}
         <div className="card" style={{marginBottom: 30}}>
           <div className="card-header"><FaChartPie /> Comparativo de Mercado</div>
           <div style={{marginTop: 20}}>
@@ -202,7 +209,11 @@ export default function Dashboard() {
                 <div key={index} style={{marginBottom: 20}}>
                     <div style={{display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem', fontWeight: 600, marginBottom: 6}}>
                         <span>{item.nomeHabilidade}</span>
-                        <span style={{ color: isPos ? 'var(--success-color)' : 'var(--danger-color)' }}>
+                        <span style={{ 
+                            color: isPos ? 'var(--success-color)' : 'var(--danger-color)',
+                            background: isPos ? 'rgba(16,185,129,0.1)' : 'rgba(239,68,68,0.1)',
+                            padding: '2px 6px', borderRadius: 4, fontSize: '0.8rem'
+                        }}>
                             {isPos ? '+' : ''}{diff}%
                         </span>
                     </div>
@@ -218,7 +229,7 @@ export default function Dashboard() {
           <button className="btn-action btn-ai" onClick={handleAvaliarProntidao} disabled={loadingPredict}>
             {loadingPredict ? 'Calculando...' : <><FaRobot /> Avaliar Prontidão</>}
           </button>
-          <button className="btn-action" onClick={() => navigate('/skills')}><FaEdit /> Editar Habilidades</button>
+          <button className="btn-action" onClick={() => navigate('/skills')}><FaEdit /> Gerenciar Skills</button>
           <button className="btn-action" onClick={() => navigate('/trilhas')}><FaMapSigns /> Ver Trilhas</button>
         </div>
       </div>

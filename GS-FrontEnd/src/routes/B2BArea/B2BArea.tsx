@@ -10,7 +10,7 @@ export default function B2BArea() {
   useEffect(() => {
     const fetchDemandas = async () => {
         try {
-            const res = await fetch(`${API_BASE_URL}/demandas`);
+            const res = await fetch(`${API_BASE_URL}/java/demanda`);
             if (res.ok) {
                 const data = await res.json();
                 setVagas(data);
