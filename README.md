@@ -85,6 +85,7 @@ https://github.com/HC-Challenge-TechDevs-1TDSPH/GS-FrontEnd-2tri.git
 
 # 2. Entre na pasta do projeto
 cd GS-FrontEnd-2tri
+cd GS-FrontEnd
 
 # 3. Instale as dependências
 npm install
