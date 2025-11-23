@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { FaGlobe, FaArrowUp, FaPlus, FaCheck } from 'react-icons/fa';
 import { API_BASE_URL } from '../../services/api';
-import type { Habilidade, UsuarioHabilidade } from '../../types';
+import type { Habilidade } from '../../types';
 
 export default function EmergingSkills() {
   const [skills, setSkills] = useState<Habilidade[]>([]);
