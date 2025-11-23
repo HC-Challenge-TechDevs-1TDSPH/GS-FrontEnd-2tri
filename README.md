@@ -22,6 +22,9 @@
 * [8. Estrutura de Pastas](#8-estrutura-de-pastas)
 * [9. Endpoints e Rotas](#9-endpoints-e-rotas)
 * [10. Autores e Créditos](#10-autores-e-créditos)
+* [11. Screenshots](#11-screenshots)
+* [12. Contato](#12-contato)
+* [13. Links Importantes](#12-links-importantes)
   
 
 ## 4. Sobre o Projeto
@@ -122,3 +125,25 @@ Este projeto foi desenvolvido pelos alunos da FIAP como parte do Global Solution
 Integrante Felipe Monte de Sousa  |  Aline Lourenço Carvalho  |   Luna de Carvalho Guimarães
 RM               562019           |        564538             |            562290
 Turma            1TDSPH           |        1TDSPK             |            1TDSPH
+
+11. Screenshots / Demonstração
+Dashboard
+Visão geral das métricas do usuário.
+
+Trilhas de Aprendizado
+Módulos e progresso de cursos.
+
+(Substitua os caminhos acima por imagens reais na pasta assets do seu repositório)
+
+12. Contato
+Caso tenha dúvidas ou sugestões, entre em contato através da nossa página de suporte ou diretamente com os desenvolvedores via LinkedIn.
+Felipe: https://www.linkedin.com/in/felipe-sousa-761633356/
+Aline: https://www.linkedin.com/in/aline-louren%C3%A7o-carvalho/
+Luna: https://www.linkedin.com/in/luna-guimar%C3%A3es-b0ba82309/
+
+13. Links Importantes
+Repositório GitHub: 
+Vídeo do Youtube:
+Vercel: https://gs-front-icj2fcyab-felipesousa1106-9894s-projects.vercel.app/
+
+© 2025 FutureLens. Todos os direitos reservados.
