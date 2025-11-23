@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaEye, FaEnvelope, FaLock, FaUser } from 'react-icons/fa'; 
+import { FaEye, FaEnvelope, FaLock, FaUser } from 'react-icons/fa';
 import { API_BASE_URL } from '../../services/api';
 import type { Usuario, LoginRequest } from '../../types';
 
@@ -11,7 +11,6 @@ export default function AuthPage() {
   
   const [formData, setFormData] = useState({
     nome: '',
-    username: '', 
     email: '',
     senha: '',
     confirmarSenha: '',
@@ -29,8 +28,9 @@ export default function AuthPage() {
     
     try {
         if (isLogin) {
+            // LOGIN
             const loginData: LoginRequest = {
-                login: formData.email, 
+                login: formData.email, // Backend espera "login", mandamos email
                 senha: formData.senha
             };
 
@@ -50,6 +50,7 @@ export default function AuthPage() {
             }
 
         } else {
+            // CADASTRO
             if (formData.senha !== formData.confirmarSenha) {
                 alert("Senhas não conferem!");
                 setIsLoading(false);
@@ -58,11 +59,11 @@ export default function AuthPage() {
 
             const novoUsuario: Usuario = {
               nome: formData.nome,
-              username: formData.email.split('@')[0],
+              username: formData.email.split('@')[0], // Gera username
               email: formData.email,
               senha: formData.senha,
-              dataDeCadastro: new Date().toISOString().split('T')[0],
-              idUsuario: 0 
+              // Envia data atual ou deixa o back-end definir
+              dataDeCadastro: new Date().toISOString().split('T')[0]
             };
 
             const response = await fetch(`${API_BASE_URL}/usuarios`, {
@@ -72,16 +73,14 @@ export default function AuthPage() {
             });
 
             if (response.ok) {
-                alert("Conta criada com sucesso! Faça login.");
-                setIsLogin(true); // Troca para a tela de login automaticamente
-                // Limpa a senha para o usuário digitar novamente (segurança)
-                setFormData(prev => ({ ...prev, senha: '', confirmarSenha: '' }));
+                alert("Conta criada! Faça login.");
+                setIsLogin(true);
             } else {
-                alert("Erro ao criar conta. Verifique os dados.");
+                alert("Erro ao criar conta.");
             }
         }
     } catch (error) {
-        console.error("Erro de conexão:", error);
+        console.error("Erro:", error);
         alert("Erro de conexão com o servidor.");
     } finally {
         setIsLoading(false);
@@ -98,6 +97,7 @@ export default function AuthPage() {
           </div>
           <h2>{isLogin ? 'Bem-vindo' : 'Crie sua conta'}</h2>
         </div>
+        
         <form className="auth-form" onSubmit={handleSubmit}>
           {!isLogin && (
             <div className="input-group">
@@ -105,14 +105,17 @@ export default function AuthPage() {
               <input type="text" name="nome" placeholder="Nome completo" className="form-input" value={formData.nome} onChange={handleChange} required />
             </div>
           )}
+          
           <div className="input-group">
             <FaEnvelope className="input-icon" />
             <input type="email" name="email" placeholder="Email" className="form-input" value={formData.email} onChange={handleChange} required />
           </div>
+          
           <div className="input-group">
             <FaLock className="input-icon" />
             <input type="password" name="senha" placeholder="Senha" className="form-input" value={formData.senha} onChange={handleChange} required />
           </div>
+          
           {!isLogin && (
             <>
               <div className="input-group">
@@ -125,9 +128,11 @@ export default function AuthPage() {
               </label>
             </>
           )}
+          
           <button type="submit" className="btn-submit" disabled={isLoading}>
             {isLoading ? 'Carregando...' : (isLogin ? 'Entrar' : 'Cadastrar')}
           </button>
+          
           <div className="auth-footer">
             <button type="button" onClick={() => setIsLogin(!isLogin)} className="link-toggle">
               {isLogin ? 'Não tem conta? Crie agora' : 'Já tem conta? Entre'}

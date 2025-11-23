@@ -18,6 +18,7 @@ import ReadinessResult from './routes/ReadinessResult/ReadinessResult.tsx';
 import B2BArea from './routes/B2BArea/B2BArea.tsx';
 import Error from './routes/Error/index.tsx';
 import Sobre from './routes/AboutPage/AboutPage.tsx';
+import SkillsPage from './routes/SkillsPage/SkillsPage.tsx';
 
 const router = createBrowserRouter([
   {
@@ -38,6 +39,7 @@ const router = createBrowserRouter([
       { path: '/comparativo', element: <MarketComparison /> },
       { path: '/analise', element: <ReadinessResult /> },
       { path: '/b2b', element: <B2BArea /> },
+      { path: '/skills', element: <SkillsPage /> },
     ],
   },
 ]);
