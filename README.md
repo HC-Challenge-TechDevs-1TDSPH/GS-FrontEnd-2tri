@@ -162,10 +162,33 @@ Projeto desenvolvido para o **Global Solution (FIAP)**.
 
 ## 🖼️ 11. Screenshots / Demonstração
 
-* Dashboard — visão geral de métricas
-* Trilhas de aprendizado — módulos e progresso
+* Home - <img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/d0f5f563-8be2-4975-9998-9ac5dc4280b5" />
 
-*(Substitua por imagens reais da pasta `/assets`)*
+* Dashboard (visão geral de métricas) - <img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/7d49c611-580d-4c5e-8a8a-ead989abe3e9" /> <img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/dcd803a2-2558-4e30-ac5e-e691ea54e34b" />
+
+* Trilhas de aprendizado (módulos e progresso) - <img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/ff85c3e2-54fc-4df9-9450-f93f975f3cc5" />
+
+* Tendencias - <img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/506a4205-774f-4272-89f7-fcf0c07bf37b" />
+
+* Mercado (comparativo) - <img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/f8307e7f-6fd1-456a-a9db-88ce20bbe5cc" />
+
+* Empresas (B2BArea) - <img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/931afffc-68f4-4942-b0a8-aaf37b80b495" />
+
+* Equipe (Integrantes) - <img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/62800762-4deb-499d-b65a-5261ef983053" />
+
+* Sobre - <img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/e3423e39-c033-49a6-91b1-a1413c121cfb" /> <img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/aef6f8fc-6fe4-4885-86a4-d843c8f6fe56" />
+
+* FAQ - <img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/d4df7cb9-d4a3-4a12-aa36-45edf1d28b7e" /> <img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/7cdfbc72-702a-4b6d-8c75-eaf59c115d5d" />
+
+* Contato - <img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/077defb4-b061-4342-9e75-64604ca60546" />
+
+* Login (AuthPage) - <img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/93de415f-79a6-4c21-b60c-7cafb989cc7f" />
+
+* Cadastro (AuthPage) - <img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/7f8b2176-df6b-4f13-9d5e-4301e6d2b95c" />
+
+* Analise - <img width="1918" height="1079" alt="image" src="https://github.com/user-attachments/assets/378026e9-0182-4a96-916c-ccf0e0b86be2" />
+
+* Skills - <img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/30fd1784-d8b0-4780-83c2-1a4dcee4c91c" />
 
 ---
 
@@ -181,7 +204,7 @@ Projeto desenvolvido para o **Global Solution (FIAP)**.
 
 * **Repositório GitHub:** [https://github.com/HC-Challenge-TechDevs-1TDSPH/GS-FrontEnd-2tri.git](https://github.com/HC-Challenge-TechDevs-1TDSPH/GS-FrontEnd-2tri.git)
 * **Deploy Vercel:** [https://gs-front-82rmi2p7i-aline-lourencos-projects.vercel.app/](https://gs-front-82rmi2p7i-aline-lourencos-projects.vercel.app/)
-* **Vídeo de Apresentação:** *(adicione aqui)*
+* **Vídeo de Apresentação:** [https://youtu.be/7U20N09OCeA](https://youtu.be/7U20N09OCeA)
 
 ---
 
