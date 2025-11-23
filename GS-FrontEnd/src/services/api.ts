@@ -1,0 +1,1 @@
+export const API_BASE_URL = 'https://rm-562290-java-global-solution-api.onrender.com';
